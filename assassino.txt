@@ -1,0 +1,86 @@
+﻿Bem vindo ao trabalho de investigação de assassinato do Sr. Foster em Pandas! 
+Abaixo você encontrará o enunciado da questão, assim como o passo a passo que você deve seguir.
+O trabalho consiste em montar queries de tabelas em banco de dados para encontrar informações relevantes.
+4 Tabelas serão usadas, e serão disponibilizadas em arquivos .csv
+Inicialmente você deve:
+
+1) Criar os dataframes para cada CSV importando eles
+
+Escreva no espaço abaixo o codigo que você fez para criar os dataframes
+
+-------------------------------------------------------------------------------------------------------------------------------
+CODIGO PARA CRIAR OS 4 DFs
+import pandas
+import pandas as pd
+
+estoque = pd.read_csv('./Estoque.csv',delimiter=";")
+heranca = pd.read_csv('./Heranca.csv',delimiter=";")
+relatos = pd.read_csv('./Relatos.csv',delimiter=";")
+suspeitos = pd.read_csv('./Suspeitos.csv',delimiter=";")
+-------------------------------------------------------------------------------------------------------------------------------
+
+Se você conseguiu importar todos os 4 CSVs, pode começar o exercício:
+
+Era uma linda noite na mansão Foster. 
+O bilionário e filantropo Sr. Foster celebrava seu aniversário de 84 anos fazendo uma festa de gala mascarada, com 150 convidados, como fazia todos os anos. 
+Os convidados recebiam uma máscara de animal na porta, e deixavam seus pertences na portaria, assim como suas informações pessoais.
+Este ano, contudo, foi diferente. Com o badalar do relógio marcando 20hrs, as luzes se apagaram e um grito foi ouvido em meio a escuridão.
+Não demorou para que as luzes voltassem, mas para o horror de muitos dos convidados, seria melhor que elas estivessem ficado apagadas: O corpo de Sr. Foster se encontrava estirado no chão, ja sem pulso.
+O caos e gritaria se instaurarem em meio a multidão de convidados confusos e assustados era inevitável, mas por sorte (ou talvez destino), um grupo de convidados permanesceu calmo e analitico perante esta situação: Vocês
+Olhando aquela situação inesperada, vocês imediatamente concluiram, que como bons detetives aposentados, era seu trabalho decifrar o mistério do assassinato do Sr. Foster.
+
+Como detetives experiêntes, vocês sabem que o mistério só estará solucionado quando encontrarem o culpado, a arma do crime e o motivo.
+Instintivamente, um de vocês se lembrou que era de suma importância obter a lista de convidados e geraram uma tabela intitulada Suspeitos (esta tabela se encontra nos anexos).
+Esta tabela contem o nome de todas as pessoas presentes na festa, convidado ou funcionário, assim como seus dados pessoas e qual máscara eles usaram. 
+Outro detetive procurou a filha de Sr Foster, que estava mais próxima dele quando tudo aconteceu, e após prestar suas condolências, pediu o depoimento dela:
+
+Relato da testemunha 1:
+
+"não sei seu policial, tudo aconteceu muito rápido... A pessoa estava de máscara, não consegui identificar qual, mas tinha cabelos loiros e tinha entre 1,65 e 1,85 de altura."
+
+-------------------------------------------------------------------------------------------------------------------------------
+QUERY PARA REDUZIR O NUMERO DE SUSPEITOS:
+suspeitos=suspeitos.query('Altura>164<185')
+suspeitos=suspeitos.query('Cor_do_cabelo=="Loiro"')
+-------------------------------------------------------------------------------------------------------------------------------
+
+Não satisfeitos com o relato vago, os detetives pedem para vários convidados darem seus relatos também, registrando tudo em uma tabela intitulada Relatos (esta tabela se encontra nos anexos).
+Esta tabela contem o nome dos convidados entrevistados, assim como a ordem em que foram entrevistados, seus relatos e a mascara que usavam.
+Ao final dos depoimentos, o detetive que estava fazendo as anotações na tabela concluiu, satisfeito, que dentre os 30 relatos obtidos, dois seriam muito úteis.
+Infelizmente, depois de beber algumas taças de vinho a mais do que deveria, o detetive não se lembra os nomes das pessoas que deram estes dois relatos! 
+Ele só se lembra vagamente que um se chamava "Gustavo F...", mas não conseguia se lembrar do nome do meio, enquanto que o outro foi entrevistado logo depois da Srta. Madalena Silva.
+
+-------------------------------------------------------------------------------------------------------------------------------
+QUERY PARA ENCONTRAR O PRIMEIRO RELATO:
+Resultado = relatos['Nome'].apply(lambda x: "Gustavo F" in x)
+-------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------
+QUERY PARA ENCONTRAR O SEGUNDO RELATO:
+Resultado2 = relatos['Nome'].apply(lambda x: "Madalena Silva" in x)
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+Com o primeiro relato em mãos, os detetives conseguem fazer uma rápida busca e identificar a arma do crime
+-------------------------------------------------------------------------------------------------------------------------------
+QUERY PARA ENCONTRAR A ARMA DO CRIME:
+data1=estoque.query
+data2=estoque.query
+data2.loc[~data2["Código"].isin(data1["Código"])]
+-------------------------------------------------------------------------------------------------------------------------------
+Com o segundo relato, eles conseguem identificar o motivo e o culpado:
+-------------------------------------------------------------------------------------------------------------------------------
+QUERY PARA ENCONTRAR O CULPADO:
+assassino=heranca.loc[heranca["Suspeito"].isin(suspeitos["Nome"])]
+assassino['Herança'].max()
+-------------------------------------------------------------------------------------------------------------------------------
+
+Bom trabalho detetives! Vocês conseguiram solucionar o caso, e podem ir para casa tranquilos, cientes de que o mal não venceu hoje. (FIM DO TRABALHO, O RESTO É BONUS, OPCIONAL)
+
+Semanas após o ocorrido, o suspeito foi preso e você se encontra deitado em sua cama, no limiar do sono, quase apagando
+Como um raio surgindo do nada, você começa a refletir. Alguma coisa não está se encaixando, algo te incomoda, algo não bate. 
+Você revê os papeis, os dados, as conclusões, e percebe que talvez... Não, deve ser maluquiçe. Mas talvez... Talvez você tenha prendido a pessoa errada.
+Alguma informação não batia. Alguma inconsistência te incomodava. Alguma informação não foi usada, mas poderia ter sido, e se tivesse, as coisas teriam outro resultado.
+Você vai ignorar os pensamentos intrusivos, engolir um remédio e tentar dormir, ciente de que um inocente pode ter sido preso por sua culpa? 
+Ou vai tentar descobrir o detalhe que faltou, alguma inconsistência nos dados, que muda tudo?
+
+Começe procurando pelas máscaras, identifique quantas pessoas com a mesma máscara existiam na festa e procure alguma discrepância
